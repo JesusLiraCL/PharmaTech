@@ -1,0 +1,29 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8F9FA;
+    color: #212529;
+}
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.chat-bubble-user {
+    background-color: #0d9488;
+    color: white;
+}
+.chat-bubble-bot {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+.icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 9999px;
+    background-color: #ccfbf1;
+    color: #0d9488;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 600;
+}
