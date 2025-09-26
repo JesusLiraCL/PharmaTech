@@ -1,75 +1,438 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmaTech - Catálogo de Productos</title>
+    <title>PharmaTech - Catálogo Detallado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos base para la tipografía */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            /* Color de fondo suave */
+        }
+
+        /* Estilos para el chat modal (animación de entrada) */
+        #chat-modal {
+            transform: scale(0);
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        #chat-modal:not(.hidden) {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Colores de Categoría para el borde */
+        .border-medicamentos {
+            border-color: #ef4444;
+        }
+
+        /* Rojo */
+        .border-suplementos {
+            border-color: #3b82f6;
+        }
+
+        /* Azul */
+        .border-aseo {
+            border-color: #14b8a6;
+        }
+
+        /* Teal */
+        .border-auxilios {
+            border-color: #059669;
+        }
+
+        /* Verde */
+        .border-especial {
+            border-color: #8b5cf6;
+        }
+
+        /* Violeta */
+    </style>
 </head>
+
 <body class="antialiased">
 
     <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-teal-600">PharmaTech</a>
-            <div class="hidden md:flex space-x-8 items-center">
-                <a href="index.html" class="text-gray-600 hover:text-teal-600 transition-colors">Inicio</a>
-                <a href="acerca_de.html" class="text-gray-600 hover:text-teal-600 transition-colors">Nosotros</a>
-                <a href="productos.html" class="text-gray-600 hover:text-teal-600 transition-colors">Productos</a>
-                <a href="#" class="bg-teal-600 text-white font-bold py-2 px-6 rounded-full hover:bg-teal-700 transition-colors">Iniciar Sesión</a>
+        <nav
+            class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="flex flex-col md:flex-row items-center w-full md:w-auto">
+                <a href="index.html" class="text-2xl font-bold text-teal-600 mb-4 md:mb-0 md:mr-8">PharmaTech</a>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-gray-600 hover:text-teal-600 transition-colors">Inicio</a>
+                    <a href="acerca_de.html" class="text-gray-600 hover:text-teal-600 transition-colors">Nosotros</a>
+                    <a href="productos.html"
+                        class="text-teal-600 font-semibold border-b-2 border-teal-600">Productos</a>
+                </div>
             </div>
-            <button id="mobile-menu-button" class="md:hidden text-gray-600 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+
+            <div class="flex items-center space-x-4 w-full md:w-auto">
+                <input type="text" id="search-input" placeholder="Buscar productos..."
+                    class="w-full md:w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all">
+                <a href="#"
+                    class="bg-teal-600 text-white font-bold py-2 px-6 rounded-full hover:bg-teal-700 transition-colors shadow-md shadow-teal-300/50 flex-shrink-0">Iniciar
+                    Sesión</a>
+            </div>
+
+            <button id="mobile-menu-button"
+                class="md:hidden text-gray-600 focus:outline-none p-2 rounded-full hover:bg-teal-50 absolute top-4 right-6">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
+                    </path>
+                </svg>
             </button>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden">
-            <a href="index.html" class="block py-2 px-6 text-sm text-gray-600 hover:bg-teal-50">Inicio</a>
-            <a href="acerca_de.html" class="block py-2 px-6 text-sm text-gray-600 hover:bg-teal-50">Nosotros</a>
-            <a href="productos.html" class="block py-2 px-6 text-sm text-gray-600 hover:bg-teal-50">Productos</a>
-            <a href="#" class="block py-2 px-6 text-sm text-gray-600 hover:bg-teal-50">Iniciar Sesión</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <a href="index.html"
+                class="block py-3 px-6 text-sm text-gray-600 hover:bg-teal-50 border-t border-gray-100">Inicio</a>
+            <a href="acerca_de.html" class="block py-3 px-6 text-sm text-gray-600 hover:bg-teal-50">Nosotros</a>
+            <a href="productos.html"
+                class="block py-3 px-6 text-sm text-teal-600 font-semibold bg-teal-50">Productos</a>
+            <a href="#" class="block py-3 px-6 text-sm text-gray-600 hover:bg-teal-50 border-t border-gray-100">Iniciar
+                Sesión</a>
         </div>
     </header>
 
-    <main>
+    <main class="min-h-screen">
         <section id="productos" class="py-16 md:py-24">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Catálogo de Productos</h2>
-                    <p class="text-lg text-gray-600 mt-2">Aquí encontrarás un listado de nuestros productos. Usa el chatbot para hacer tu pedido.</p>
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight">Catálogo Extendido de
+                        Productos</h2>
+                    <p class="text-xl text-gray-600 mt-4 max-w-2xl mx-auto">Información detallada de nuestros 25
+                        productos esenciales, sin imágenes para una carga rápida.</p>
+                </div>
+
+                <div id="productos-container"
+                    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-medicamentos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Ibuprofeno 400mg</h3>
+                        <p class="categoria text-sm font-semibold text-red-500 mb-4 uppercase">Medicamentos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Analgésico y
+                            antiinflamatorio para alivio de dolores y fiebre. 20 tabletas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$4.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-medicamentos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Paracetamol 500mg</h3>
+                        <p class="categoria text-sm font-semibold text-red-500 mb-4 uppercase">Medicamentos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Alivia el dolor leve a
+                            moderado y reduce la fiebre. 30 tabletas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$3.25</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-medicamentos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Amoxicilina 500mg</h3>
+                        <p class="categoria text-sm font-semibold text-red-500 mb-4 uppercase">Medicamentos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Requiere receta.
+                            Tratamiento de infecciones bacterianas comunes. 12 cápsulas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$15.00</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-medicamentos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Omeprazol 20mg</h3>
+                        <p class="categoria text-sm font-semibold text-red-500 mb-4 uppercase">Medicamentos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Inhibidor de la bomba
+                            de protones para el tratamiento del reflujo. 14 cápsulas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$8.10</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-medicamentos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Loratadina 10mg</h3>
+                        <p class="categoria text-sm font-semibold text-red-500 mb-4 uppercase">Medicamentos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Antihistamínico no
+                            sedante para el alivio de los síntomas de la alergia. 10 tabletas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$7.25</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-medicamentos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Salbutamol Aerosol</h3>
+                        <p class="categoria text-sm font-semibold text-red-500 mb-4 uppercase">Medicamentos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Broncodilatador para el
+                            alivio rápido de síntomas de asma. 200 dosis.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$21.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-suplementos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Vitamina C con Zinc</h3>
+                        <p class="categoria text-sm font-semibold text-blue-500 mb-4 uppercase">Suplementos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Potente antioxidante
+                            que refuerza el sistema inmunológico. 30 cápsulas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$9.90</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-suplementos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Complejo B Forte</h3>
+                        <p class="categoria text-sm font-semibold text-blue-500 mb-4 uppercase">Suplementos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Mejora el metabolismo
+                            energético y la salud del sistema nervioso. 60 tabletas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$11.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-suplementos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Aceite de Pescado Omega 3</h3>
+                        <p class="categoria text-sm font-semibold text-blue-500 mb-4 uppercase">Suplementos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Cápsulas ricas en EPA y
+                            DHA para la salud cardiovascular y cerebral. 90 cápsulas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$22.00</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-suplementos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Magnesio y Calcio D</h3>
+                        <p class="categoria text-sm font-semibold text-blue-500 mb-4 uppercase">Suplementos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Suplemento para el
+                            mantenimiento de huesos y músculos fuertes. 90 tabletas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$18.45</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-suplementos flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Probióticos 10 Billion CFU
+                        </h3>
+                        <p class="categoria text-sm font-semibold text-blue-500 mb-4 uppercase">Suplementos</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Promueve la salud
+                            digestiva y el equilibrio de la flora intestinal. 30 cápsulas.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$15.99</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-aseo flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Gel Antibacterial</h3>
+                        <p class="categoria text-sm font-semibold text-teal-600 mb-4 uppercase">Aseo Personal</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Desinfectante de manos
+                            de secado rápido, elimina 99.9% de gérmenes. 120 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$2.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-aseo flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Protector Solar FPS 50+</h3>
+                        <p class="categoria text-sm font-semibold text-teal-600 mb-4 uppercase">Aseo Personal</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Muy alta protección
+                            UVA/UVB, fórmula no grasa, resistente al agua. 50 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$14.25</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-aseo flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Pasta Dental Anti-Caries</h3>
+                        <p class="categoria text-sm font-semibold text-teal-600 mb-4 uppercase">Aseo Personal</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Protección completa y
+                            aliento fresco. Contiene flúor activo. 100 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$5.99</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-aseo flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Shampoo Dermatológico</h3>
+                        <p class="categoria text-sm font-semibold text-teal-600 mb-4 uppercase">Aseo Personal</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Formulado para cuero
+                            cabelludo sensible, libre de sulfatos y parabenos. 250 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$12.00</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-aseo flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Enjuague Bucal</h3>
+                        <p class="categoria text-sm font-semibold text-teal-600 mb-4 uppercase">Aseo Personal</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Ayuda a prevenir la
+                            placa y el mal aliento sin sensación de ardor. 500 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$4.75</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-auxilios flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Vendas Elásticas</h3>
+                        <p class="categoria text-sm font-semibold text-green-600 mb-4 uppercase">Primeros Auxilios</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Venda de compresión
+                            para esguinces y soporte articular. 5 cm x 4.5 m.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$6.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-auxilios flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Kit de Curación Básico</h3>
+                        <p class="categoria text-sm font-semibold text-green-600 mb-4 uppercase">Primeros Auxilios</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Botiquín con gasas,
+                            adhesivos, antiséptico y tijeras para emergencias menores.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$15.75</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-auxilios flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Alcohol Isopropílico</h3>
+                        <p class="categoria text-sm font-semibold text-green-600 mb-4 uppercase">Primeros Auxilios</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Solución al 70% para
+                            desinfección de superficies e instrumental. 500 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$3.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-auxilios flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Tiras Adhesivas (Curitas)</h3>
+                        <p class="categoria text-sm font-semibold text-green-600 mb-4 uppercase">Primeros Auxilios</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">100 unidades de
+                            diferentes tamaños, flexibles y resistentes al agua.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$4.00</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-auxilios flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Agua Oxigenada</h3>
+                        <p class="categoria text-sm font-semibold text-green-600 mb-4 uppercase">Primeros Auxilios</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Antiséptico tópico para
+                            la limpieza de heridas leves. 100 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$1.99</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-especial flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Crema Hidratante Piel Seca
+                        </h3>
+                        <p class="categoria text-sm font-semibold text-purple-600 mb-4 uppercase">Cuidado Especial /
+                            Dermatología</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Fórmula intensiva con
+                            urea para restaurar la barrera cutánea. 400 ml.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$19.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-especial flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Crema para Hemorroides</h3>
+                        <p class="categoria text-sm font-semibold text-purple-600 mb-4 uppercase">Cuidado Especial</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Alivio rápido y eficaz
+                            del dolor, picazón e inflamación. 30g.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$9.75</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-especial flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Preservativos Clásicos</h3>
+                        <p class="categoria text-sm font-semibold text-purple-600 mb-4 uppercase">Cuidado Especial</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">12 unidades. Látex
+                            natural, lubricados, forma anatómica.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$10.50</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="producto bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-b-4 border-especial flex flex-col p-6">
+                        <h3 class="nombre-producto text-2xl font-bold text-gray-800 mb-1">Pañales Adulto Talla G</h3>
+                        <p class="categoria text-sm font-semibold text-purple-600 mb-4 uppercase">Cuidado Especial</p>
+                        <p class="descripcion text-gray-600 flex-grow mb-4 text-justify text-sm">Máxima absorción y
+                            protección contra fugas. Paquete de 10 unidades.</p>
+                        <div class="mt-auto pt-4 border-t border-gray-100 flex justify-end items-center">
+                            <span class="text-3xl font-extrabold text-teal-700">$18.99</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
     </main>
-    
-    <footer class="bg-gray-800 text-white py-6">
+
+    <footer class="bg-gray-800 text-white py-6 mt-12">
         <div class="container mx-auto px-6 text-center text-sm">
             <p>&copy; 2024 PharmaTech. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <div id="chat-widget-container" class="fixed bottom-5 right-5 z-50">
-        <button id="chat-open-button" class="bg-teal-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center hover:bg-teal-700 transition-transform transform hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        <button id="chat-open-button"
+            class="bg-teal-600 text-white w-16 h-16 rounded-full shadow-xl shadow-teal-500/50 flex items-center justify-center hover:bg-teal-700 transition-transform transform hover:scale-110 focus:outline-none ring-4 ring-teal-300/50">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
         </button>
 
-        <div id="chat-modal" class="hidden fixed bottom-24 right-5 w-80 sm:w-96 h-[60vh] bg-white rounded-xl shadow-2xl flex flex-col transition-all origin-bottom-right">
+        <div id="chat-modal"
+            class="hidden fixed bottom-24 right-5 w-80 sm:w-96 h-[60vh] bg-white rounded-xl shadow-2xl flex flex-col transition-all origin-bottom-right">
             <div class="bg-teal-600 text-white p-4 rounded-t-xl flex justify-between items-center">
-                <h3 class="font-bold text-lg">Asistente Virtual</h3>
-                <button id="chat-close-button" class="text-white">&times;</button>
+                <h3 class="font-bold text-lg">Asistente Virtual PharmaTech</h3>
+                <button id="chat-close-button"
+                    class="text-white text-2xl font-bold p-1 leading-none hover:text-teal-100">&times;</button>
             </div>
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4">
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50">
             </div>
-            <div class="p-2 border-t border-gray-200">
+            <div class="p-2 border-t border-gray-200 bg-white">
                 <form id="chat-form" class="flex space-x-2">
-                    <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." class="flex-1 border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-teal-500" autocomplete="off">
-                    <button type="submit" class="bg-teal-600 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">
+                    <input type="text" id="chat-input" placeholder="Escribe tu mensaje..."
+                        class="flex-1 border border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        autocomplete="off">
+                    <button type="submit"
+                        class="bg-teal-600 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 hover:bg-teal-700 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            <path
+                                d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                         </svg>
                     </button>
                 </form>
@@ -77,6 +440,96 @@
         </div>
     </div>
 
-    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Lógica del Menú Móvil ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // --- Lógica de la Búsqueda ---
+            const searchInput = document.getElementById('search-input');
+            const productosContainer = document.getElementById('productos-container');
+            const productos = productosContainer.getElementsByClassName('producto');
+
+            searchInput.addEventListener('keyup', (event) => {
+                const searchTerm = event.target.value.toLowerCase();
+
+                for (let i = 0; i < productos.length; i++) {
+                    const producto = productos[i];
+                    const nombre = producto.querySelector('.nombre-producto').textContent.toLowerCase();
+                    const categoria = producto.querySelector('.categoria').textContent.toLowerCase();
+                    const descripcion = producto.querySelector('.descripcion').textContent.toLowerCase();
+
+                    // Comprueba si el término de búsqueda está en el nombre, categoría o descripción
+                    if (nombre.includes(searchTerm) || categoria.includes(searchTerm) || descripcion.includes(searchTerm)) {
+                        producto.style.display = ''; // Muestra el producto
+                    } else {
+                        producto.style.display = 'none'; // Oculta el producto
+                    }
+                }
+            });
+
+            // --- Lógica del Chat Widget ---
+            const chatOpenButton = document.getElementById('chat-open-button');
+            const chatCloseButton = document.getElementById('chat-close-button');
+            const chatModal = document.getElementById('chat-modal');
+
+            // Mostrar/Ocultar chat modal
+            chatOpenButton.addEventListener('click', () => {
+                chatModal.classList.toggle('hidden');
+            });
+
+            chatCloseButton.addEventListener('click', () => {
+                chatModal.classList.add('hidden');
+            });
+
+            // Lógica de Placeholder para el Chat (simulación de envío)
+            const chatForm = document.getElementById('chat-form');
+            const chatMessages = document.getElementById('chat-messages');
+
+            // Mensaje inicial del asistente
+            chatMessages.innerHTML = `
+                <div class="flex justify-start">
+                    <div class="bg-gray-200 text-gray-700 p-3 rounded-t-xl rounded-br-xl max-w-[80%] shadow-sm">
+                        👋 ¡Hola! Soy el Asistente Virtual de PharmaTech. Este catálogo es estático. Si necesitas información adicional, puedes preguntar.
+                    </div>
+                </div>
+            `;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = document.getElementById('chat-input');
+                const messageText = input.value.trim();
+
+                if (messageText) {
+                    // 1. Añadir mensaje del usuario
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'flex justify-end';
+                    userMessage.innerHTML = `<div class="bg-teal-500 text-white p-3 rounded-t-xl rounded-bl-xl max-w-[80%] shadow-md">${messageText}</div>`;
+                    chatMessages.appendChild(userMessage);
+
+                    // 2. Simular respuesta del asistente
+                    setTimeout(() => {
+                        const aiMessage = document.createElement('div');
+                        aiMessage.className = 'flex justify-start';
+                        aiMessage.innerHTML = `<div class="bg-gray-200 text-gray-700 p-3 rounded-t-xl rounded-br-xl max-w-[80%] shadow-sm">He visto tu mensaje. Recuerda que no podemos procesar pedidos en esta versión del catálogo.</div>`;
+                        chatMessages.appendChild(aiMessage);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000); // Retraso de 1 segundo
+
+                    // Limpiar el input
+                    input.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
